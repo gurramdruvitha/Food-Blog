@@ -1,32 +1,418 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Food Blog </title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Food Blog</title>
+    <style>
+        :root {
+            --brand: #ff6f61;
+            --text: #333;
+            --muted: #666;
+            --bg: #f7f4ef;
+            --surface: #ffffff;
+            --border: rgba(0, 0, 0, 0.08);
+            font-family: Inter, system-ui, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand img {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .hero {
+            position: relative;
+            min-height: 60vh;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            color: #fff;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1500&q=80') center/cover no-repeat;
+        }
+
+        .hero-content {
+            max-width: 760px;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            margin: 0 0 1rem;
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            letter-spacing: -0.05em;
+        }
+
+        .hero p {
+            margin: 0 0 1.75rem;
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 1.1rem;
+        }
+
+        .button {
+            display: inline-block;
+            background: var(--brand);
+            color: #fff;
+            padding: 0.95rem 1.8rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(255, 111, 97, 0.18);
+        }
+
+        main {
+            padding: 3rem 2rem 1rem;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card,
+        .promo-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .card img,
+        .promo-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+        }
+
+        .card-content,
+        .promo-content {
+            padding: 1.75rem;
+        }
+
+        .card h2,
+        .promo-content h2 {
+            margin: 0 0 0.75rem;
+            font-size: 1.7rem;
+        }
+
+        .card p,
+        .promo-content p {
+            margin: 0 1rem 1rem 0;
+            color: var(--muted);
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .stats span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .recipe-card {
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        .recipe-card img {
+            height: 240px;
+            object-fit: cover;
+        }
+
+        .recipe-card div {
+            padding: 1.5rem;
+        }
+
+        .recipe-card small {
+            display: inline-block;
+            margin-bottom: 0.75rem;
+            color: var(--brand);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-weight: 700;
+        }
+
+        .recipe-card h3 {
+            margin: 0 0 0.8rem;
+            font-size: 1.35rem;
+        }
+
+        .recipe-card p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .gallery {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            min-height: 220px;
+            background: #f0f0f0;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: #1b1b1f;
+            color: #f2f2f2;
+            padding: 2.5rem 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 2rem;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .footer-grid h3 {
+            margin-top: 0;
+        }
+
+        .footer-grid a {
+            color: #f2f2f2;
+            text-decoration: none;
+        }
+
+        .footer-bottom {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.95rem;
+            color: rgba(242, 242, 242, 0.72);
+        }
+
+        @media (max-width: 900px) {
+            .intro-grid,
+            .recipe-grid,
+            .footer-grid,
+            .gallery-row {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header style="height: 100px;background-color: pink; display: flex;">
-        <img src="./img1.png" alt="Logo" width="100px" height="100px"/>
-        <h2>
-            Food Blog
-        </h2>
+    <header>
+        <div class="brand">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=120&q=80" alt="Food Blog logo" />
+            <div>
+                <strong>Food Blog</strong>
+                <div style="font-size:0.9rem;color:var(--muted);">Fresh recipes every week</div>
+            </div>
+        </div>
         <nav>
-           <ul style="display: flex;list-style-type: none;">
-            <li> Home </li>
-            <li> About </li>
-            <li> items </li>
-            <li> bookings </li>
-            <li> Login </li>
-           </ul>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#featured">Recipes</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
         </nav>
     </header>
-    <main style="height: 1600px;background-color:antiquewhite;">
-        <div style="display: flex;">
-        <article style="height: 1600px; background-color: lightblue; width:30%"></article>
-        <section style="height: 1600px; width:70%;background-color:peachpuff;"></section>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Culinary stories, seasonal recipes, and vibrant flavor inspiration.</h1>
+            <p>Discover chef-curated meals, quick comfort food ideas, and beautiful plates from around the world—all presented with mouth-watering photography.</p>
+            <a class="button" href="#featured">Explore the menu</a>
+        </div>
+    </section>
+
+    <main>
+        <section class="intro-grid">
+            <article class="card">
+                <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80" alt="Fresh Ingredients" />
+                <div class="card-content">
+                    <h2>Seasonal eating, simplified</h2>
+                    <p>From brunch favorites to family dinners, every recipe is designed to be beautiful, approachable, and easy to cook.</p>
+                    <div class="stats">
+                        <span>• 120+ recipes</span>
+                        <span>• Weekly updates</span>
+                    </div>
+                </div>
+            </article>
+
+            <div class="promo-card">
+                <img src="https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=1200&q=80" alt="Chef plating food" />
+                <div class="promo-content">
+                    <h2>Featured story</h2>
+                    <p>Learn how our team curates the best seasonal dishes, ingredient guides, and cooking tips for easy home entertaining.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="recipe-grid" id="featured">
+            <article class="recipe-card">
+                <img src="https://images.unsplash.com/photo-1512058564366-c9b5e10f1e12?auto=format&fit=crop&w=1200&q=80" alt="Salad bowl" />
+                <div>
+                    <small>Fresh & Fast</small>
+                    <h3>Harvest grain bowl</h3>
+                    <p>Bright, hearty grains with roasted vegetables, avocado, and a tangy lemon dressing.</p>
+                </div>
+            </article>
+            <article class="recipe-card">
+                <img src="https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80" alt="Pasta dish" />
+                <div>
+                    <small>Chef's pick</small>
+                    <h3>Herbed tomato pasta</h3>
+                    <p>Simple pasta tossed with blistered cherry tomatoes, basil, and parmesan for a perfect weeknight meal.</p>
+                </div>
+            </article>
+            <article class="recipe-card">
+                <img src="https://images.unsplash.com/photo-1514516870926-8c9b8d8e27aa?auto=format&fit=crop&w=1200&q=80" alt="Dessert plates" />
+                <div>
+                    <small>Sweet finish</small>
+                    <h3>Chocolate berry tart</h3>
+                    <p>A rich dark chocolate tart layered with fresh berries for a show-stopping dessert.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="gallery" id="gallery">
+            <h2 style="margin-top:0;">Gallery of flavors</h2>
+            <div class="gallery-row">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80" alt="Plate of roasted vegetables" />
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" alt="Breakfast bowl" />
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1498579809087-ef1e558fd1c5?auto=format&fit=crop&w=800&q=80" alt="Dessert close-up" />
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1481931715705-36f4b89f1e7d?auto=format&fit=crop&w=800&q=80" alt="Street food" />
+                </div>
+            </div>
+        </section>
     </main>
-    <footer style="height: 400px;background-color: lightgreen;">
+
+    <footer id="contact">
+        <div class="footer-grid">
+            <div>
+                <h3>Food Blog</h3>
+                <p>Inspiring every kitchen with seasonal recipes, beautiful imagery, and easy meal ideas.</p>
+            </div>
+            <div>
+                <h3>Explore</h3>
+                <p><a href="#featured">Recipes</a></p>
+                <p><a href="#gallery">Gallery</a></p>
+            </div>
+            <div>
+                <h3>Connect</h3>
+                <p><a href="mailto:hello@foodblog.com">hello@foodblog.com</a></p>
+                <p>Follow us on Instagram for daily food stories.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2026 Food Blog · Crafted for home cooks and food lovers</div>
     </footer>
 </body>
 </html>
